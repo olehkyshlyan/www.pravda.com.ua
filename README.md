@@ -1,1 +1,1 @@
-# TabloID.Photos
+# www.pravda.com.ua
