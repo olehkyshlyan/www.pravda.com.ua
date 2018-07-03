@@ -10,8 +10,6 @@
 // @grant        none
 // ==/UserScript==
 
-//alert('TabloID | Person');
-
 var TabloIDPerson = new function(){
   this.bodyBackgroundStyle = function(){
     var body = document.body;
@@ -41,11 +39,20 @@ var TabloIDPerson = new function(){
     var ttCollection = document.getElementsByClassName('tt');
     var ttZeroEl = ttCollection[0];
     var ttZeroElChildren = ttZeroEl.children;
-    var ttZElChLength = ttZeroElChildren.length;
-    for(var i=0; i<ttZElChLength; i++){
+    var ttZrElChLen = ttZeroElChildren.length;
+
+    for(var i=0; i<ttZrElChLen; i++){
       var currEl = ttZeroElChildren[i];
 
       if(currEl.id.indexOf('admixer') != -1){
+        currEl.style.display = 'none';
+      }
+
+      if(currEl.id.indexOf('adnet') != -1){
+        currEl.style.display = 'none';
+      }
+
+      if(currEl.id.indexOf('go2net') != -1){
         currEl.style.display = 'none';
       }
     }
@@ -68,14 +75,14 @@ var TabloIDPerson = new function(){
 
   this.tt2ZeroElChildren = function(){
     var tt2Collection = document.getElementsByClassName('tt2');
-    var left1 = tt2Collection[0];
-    var left1Children = left1.children;
-    var left1ChLength = left1Children.length;
+    var tt2ZeroEl = tt2Collection[0];
+    var tt2ZeroElChildren = tt2ZeroEl.children;
+    var tt2ZElChLen = tt2ZeroElChildren.length;
 
-    for(var i=0;i<left1ChLength;i++){
-      var currEl = left1Children[i];
+    for(var i=0;i<tt2ZElChLen;i++){
+      var currEl = tt2ZeroElChildren[i];
 
-      if(currEl.tagName == 'DIV' && currEl.className == 'socialb1'){
+      if(currEl.className == 'socialb1'){
         currEl.style.display = 'none';
       }
 
@@ -86,11 +93,11 @@ var TabloIDPerson = new function(){
         }
       }
 
-      if(currEl.tagName == 'DIV' && currEl.className == 'socialb2'){
+      if(currEl.className == 'socialb2'){
         currEl.style.display = 'none';
       }
 
-      if(currEl.tagName == 'DIV' && currEl.className == 'space12'){
+      if(currEl.className == 'space12'){
         currEl.style.display = 'none';
       }
 
@@ -120,9 +127,9 @@ var TabloIDPerson = new function(){
     var tt3Collection = document.getElementsByClassName('tt3');
     var tt3ZeroEl = tt3Collection[0];
     var tt3ZrElChildren = tt3ZeroEl.children;
-    var tt3ZrElChLength = tt3ZrElChildren.length;
+    var tt3ZrElChLen = tt3ZrElChildren.length;
 
-    for(var i=0;i<tt3ZrElChLength;i++){
+    for(var i=0;i<tt3ZrElChLen;i++){
       var currEl = tt3ZrElChildren[i];
 
       if(currEl.tagName == 'DIV' && currEl.id == 'link11'){
