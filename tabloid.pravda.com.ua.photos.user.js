@@ -5,11 +5,10 @@
 // @version      0.1
 // @description  TabloID | www.pravda.com.ua | Photos
 // @author       oleh.kyshlyan
+// @match        http://tabloid.pravda.com.ua/photos/*
 // @match        https://tabloid.pravda.com.ua/photos/*
 // @grant        none
 // ==/UserScript==
-
-//alert('TabloID | Photos');
 
 var TabloIDPhotos = new function(){
   this.bodyBackgroundStyle = function(){
@@ -36,15 +35,24 @@ var TabloIDPhotos = new function(){
     }
   }
 
-  this.ttChildren = function(){
+  this.ttZeroElChildren = function(){
     var ttCollection = document.getElementsByClassName('tt');
     var ttZeroEl = ttCollection[0];
     var ttZeroElChildren = ttZeroEl.children;
-    var ttZElChLength = ttZeroElChildren.length;
-    for(var i=0; i<ttZElChLength; i++){
+    var ttZrElChLen = ttZeroElChildren.length;
+
+    for(var i=0; i<ttZrElChLen; i++){
       var currEl = ttZeroElChildren[i];
 
       if(currEl.id.indexOf('admixer') != -1){
+        currEl.style.display = 'none';
+      }
+
+      if(currEl.id.indexOf('adnet') != -1){
+        currEl.style.display = 'none';
+      }
+
+      if(currEl.id.indexOf('go2net') != -1){
         currEl.style.display = 'none';
       }
     }
@@ -119,10 +127,6 @@ var TabloIDPhotos = new function(){
         currEl.style.display = 'none';
       }
 
-      if(window.getComputedStyle(currEl).getPropertyValue("padding-bottom") == '2px'){
-        currEl.style.display = 'none';
-      }
-
       if(currEl.id.indexOf('admixer') != -1){
         currEl.style.display = 'none';
       }
@@ -176,11 +180,10 @@ var TabloIDPhotos = new function(){
 
 TabloIDPhotos.bodyBackgroundStyle();
 TabloIDPhotos.main2Form();
-TabloIDPhotos.ttChildren();
+TabloIDPhotos.ttZeroElChildren();
 TabloIDPhotos.tt2ZeroElParentChildren();
 TabloIDPhotos.tt2ZeroElChildren();
 TabloIDPhotos.tt3ZeroElChildren();
 TabloIDPhotos.tt2FirstElChildren();
 TabloIDPhotos.tt3FirstElChildren();
 TabloIDPhotos.tt4ZeroEl();
-
