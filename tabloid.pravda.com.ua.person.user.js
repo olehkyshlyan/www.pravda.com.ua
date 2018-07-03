@@ -10,6 +10,7 @@
 // @grant        none
 // ==/UserScript==
 
+
 var TabloIDPerson = new function(){
   this.bodyBackgroundStyle = function(){
     var body = document.body;
