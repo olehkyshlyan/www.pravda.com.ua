@@ -12,6 +12,27 @@
 
 var UPArticles = new function(){
 
+  this.body = function(){
+    var bodyCollection = document.getElementsByTagName('body');
+    var body = bodyCollection[0];
+    if(body != undefined){
+      var bodyChildren = body.children;
+      var bdChLen = bodyChildren.length;
+
+      for(var i=0; i<bdChLen; i++){
+        var currEl = bodyChildren[i];
+
+        if(currEl.tagName == 'IMG'){
+          currEl.style.display = 'none';
+        }
+
+        if(currEl.tagName == 'IFRAME'){
+          currEl.style.display = 'none';
+        }
+      }
+    }
+  }
+
   this.layout = function(){
     var layoutCollection = document.getElementsByClassName('layout');
     var layoutZeroEl = layoutCollection[0];
@@ -107,6 +128,7 @@ var UPArticles = new function(){
   }
 }
 
+UPArticles.body();
 UPArticles.layout();
 UPArticles.postStatistic();
 UPArticles.postArticle();
