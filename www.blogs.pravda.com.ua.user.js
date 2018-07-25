@@ -153,6 +153,31 @@ var UPBlogs = new function(){
     }
   }
 
+  this.block2 = function(){
+    var block2Collection = document.getElementsByClassName('block2');
+    var block2ZeroEl = block2Collection[0];
+    if(block2ZeroEl != undefined){
+      var block2ZeroElChildren = block2ZeroEl.children;
+      var blck2ZrElChLen = block2ZeroElChildren.length;
+
+      for(var i=0; i<blck2ZrElChLen; i++){
+        var currEl = block2ZeroElChildren[i];
+
+        if(currEl.className == 'rpad101'){
+          currEl.style.display = 'none';
+        }
+
+        if(currEl.className.indexOf('banner') != -1){
+          currEl.style.display = 'none';
+        }
+
+        if(currEl.className.indexOf('adnet') != -1){
+          currEl.style.display = 'none';
+        }
+      }
+    }
+  }
+
   this.bpost = function(){
     var bpostCollection = document.getElementsByClassName('bpost');
     var bpostZeroEl = bpostCollection[0];
@@ -162,10 +187,6 @@ var UPBlogs = new function(){
 
       for(var i=0; i<bpstZrElChLen; i++){
         var currEl = bpostZeroElChildren[i];
-
-        if(currEl.className == 'cl'){
-          currEl.style.display = 'none';
-        }
 
         if(currEl.className == 'socialb1'){
           currEl.style.display = 'none';
@@ -219,6 +240,14 @@ var UPBlogs = new function(){
       }
     }
   }
+
+  this.footer = function(){
+    var footerCollection = document.getElementsByClassName('footer');
+    var footerZeroEl = footerCollection[0];
+    if(footerZeroEl != undefined){
+      footerZeroEl.style.marginTop = '20px';
+    }
+  }
 }
 
 UPBlogs.body();
@@ -226,6 +255,8 @@ UPBlogs.topBanner();
 UPBlogs.block0();
 UPBlogs.pad0();
 UPBlogs.fblock();
+UPBlogs.block2();
 UPBlogs.bpost();
 UPBlogs.posts1();
 UPBlogs.comments1();
+UPBlogs.footer();
