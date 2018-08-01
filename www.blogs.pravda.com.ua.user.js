@@ -142,6 +142,10 @@ var UPBlogs = new function(){
           currEl.style.display = 'none';
         }
 
+        if(currEl.className == 'list tl'){
+          currEl.style.display = 'none';
+        }
+
         if(currEl.className == 'h20'){
           currEl.style.display = 'none';
         }
