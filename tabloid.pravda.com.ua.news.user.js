@@ -10,8 +10,6 @@
 // @grant        none
 // ==/UserScript==
 
-//alert('TabloID | News');
-
 var TabloIDNews = new function(){
   this.bodyBackgroundStyle = function(){
     var body = document.body;
