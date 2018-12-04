@@ -10,7 +10,29 @@
 // @grant        none
 // ==/UserScript==
 
-var UkrainskaPravdaNews = new function(){
+var UPNews = new function(){
+
+  this.body = function(){
+    var bodyInclosure = function(){
+      var body = document.body;
+      if(body != undefined){
+        var bodyChildren = body.children;
+        var bdChLen = bodyChildren.length;
+        for(var i=0; i<bdChLen; i++){
+          var bodyChild = bodyChildren[i];
+
+          if(bodyChild.tagName == 'IFRAME'){
+            bodyChild.style.display = 'none';
+          }
+
+          if(bodyChild.tagName == 'IMG'){
+            bodyChild.style.display = 'none';
+          }
+        }
+      }
+    }
+    setTimeout(bodyInclosure,3000);
+  }
 
   this.layout = function(){
     var layoutCollection = document.getElementsByClassName('layout');
@@ -56,6 +78,10 @@ var UkrainskaPravdaNews = new function(){
           currEl.style.display = 'none';
         }
 
+        if(currEl.id.indexOf('admixer') != -1){
+          currEl.style.display = 'none';
+        }
+
         if(currEl.tagName == 'IFRAME' && currEl.nextElementSibling.tagName == 'SPAN'){
           currEl.style.display = 'none';
         }
@@ -65,6 +91,10 @@ var UkrainskaPravdaNews = new function(){
         }
 
         if(currEl.className == 'post_news__date' && currEl.nextElementSibling.className == 'post__social_bottom'){
+          currEl.style.display = 'none';
+        }
+
+        if(currEl.className == 'block_related'){
           currEl.style.display = 'none';
         }
 
@@ -126,8 +156,9 @@ var UkrainskaPravdaNews = new function(){
 
 }
 
-UkrainskaPravdaNews.layout();
-UkrainskaPravdaNews.postPostNews();
-UkrainskaPravdaNews.unitButtonBanner();
-UkrainskaPravdaNews.colSidebar();
-UkrainskaPravdaNews.stickyWrapper();
+UPNews.body();
+UPNews.layout();
+UPNews.postPostNews();
+UPNews.unitButtonBanner();
+UPNews.colSidebar();
+UPNews.stickyWrapper();
