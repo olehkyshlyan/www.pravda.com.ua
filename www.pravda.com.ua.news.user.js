@@ -78,6 +78,10 @@ var UPNews = new function(){
           currEl.style.display = 'none';
         }
 
+        if(currEl.tagName == 'BR'){
+          currEl.style.display = 'none';
+        }
+
         if(currEl.id.indexOf('admixer') != -1){
           currEl.style.display = 'none';
         }
