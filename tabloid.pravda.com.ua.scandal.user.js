@@ -11,16 +11,36 @@
 // ==/UserScript==
 
 var TabloIDScandal = new function(){
-  this.bodyBackgroundStyle = function(){
-    var bodyBgrStInclosure = function(){
+
+  this.body = function(){
+    var bodyInclosure = function(){
       var body = document.body;
-      //body.style.backgroundColor = 'transparent';
+      body.style.backgroundColor = 'rgb(204,208,211)';
       body.style.backgroundImage = 'none';
       body.style.backgroundRepeat = 'repeat';
       body.style.backgroundAttachment = 'scroll';
       body.style.backgroundPosition = '0% 0%';
+
+      var bodyChildren = body.children;
+      var bdChLen = bodyChildren.length;
+
+      for(var i=0; i<bdChLen; i++){
+        var bodyChild = bodyChildren[i];
+
+        if(bodyChild.tagName == 'A' && bodyChild.id.indexOf('ar') == 0){
+          bodyChild.style.display = 'none';
+        }
+
+        if(bodyChild.tagName == 'IFRAME'){
+          bodyChild.style.display = 'none';
+        }
+
+        if(bodyChild.tagName == 'IMG'){
+          bodyChild.style.display = 'none';
+        }
+      }
     }
-    setTimeout(bodyBgrStInclosure,2000);
+    setTimeout(bodyInclosure,2000);
   }
 
   this.main2Form = function(){
@@ -94,6 +114,10 @@ var TabloIDScandal = new function(){
       }
 
       if(currEl.className == 'socialb2'){
+        currEl.style.display = 'none';
+      }
+
+      if(currEl.id.indexOf('go2net') != -1){
         currEl.style.display = 'none';
       }
 
@@ -187,7 +211,7 @@ var TabloIDScandal = new function(){
   }
 }
 
-TabloIDScandal.bodyBackgroundStyle();
+TabloIDScandal.body();
 TabloIDScandal.main2Form();
 TabloIDScandal.ttZeroElChildren();
 TabloIDScandal.tt2ZeroElParentChildren();
