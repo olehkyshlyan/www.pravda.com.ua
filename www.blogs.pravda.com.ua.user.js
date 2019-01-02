@@ -13,28 +13,30 @@
 var UPBlogs = new function(){
 
   this.body = function(){
-    var bodyCollection = document.getElementsByTagName('body');
-    var body = bodyCollection[0];
-    if(body != undefined){
-      var bodyChildren = body.children;
-      var bdChLen = bodyChildren.length;
+    var bodyInclosure = function(){
+      var body = document.body;
+      if(body != undefined){
+        var bodyChildren = body.children;
+        var bdChLen = bodyChildren.length;
 
-      for(var i=0; i<bdChLen; i++){
-        var currEl = bodyChildren[i];
+        for(var i=0; i<bdChLen; i++){
+          var bodyChild = bodyChildren[i];
 
-        if(currEl.tagName == 'IMG'){
-          currEl.style.display = 'none';
-        }
+          if(bodyChild.tagName == 'IMG'){
+            bodyChild.style.display = 'none';
+          }
 
-        if(currEl.tagName == 'IFRAME'){
-          currEl.style.display = 'none';
+          if(bodyChild.tagName == 'IFRAME'){
+            bodyChild.style.display = 'none';
+          }
         }
       }
     }
+    setTimeout(bodyInclosure,2000);
   }
 
   this.topBanner = function(){
-    var body = document.getElementsByTagName('body')[0];
+    var body = document.body;
     if(body != undefined){
       var bodyFirstChild = body.children[0];
       var bodyFirstChildChildren = bodyFirstChild.children;
@@ -114,6 +116,10 @@ var UPBlogs = new function(){
           currEl.style.display = 'none';
         }
 
+        if(currEl.className == 'adsbygoogle'){
+          currEl.style.display = 'none';
+        }
+
         if(currEl.className == 'h15'){
           currEl.style.display = 'none';
         }
@@ -158,28 +164,39 @@ var UPBlogs = new function(){
   }
 
   this.block2 = function(){
-    var block2Collection = document.getElementsByClassName('block2');
-    var block2ZeroEl = block2Collection[0];
-    if(block2ZeroEl != undefined){
-      var block2ZeroElChildren = block2ZeroEl.children;
-      var blck2ZrElChLen = block2ZeroElChildren.length;
+    var block2Inclosure = function(){
+      var block2Collection = document.getElementsByClassName('block2');
+      var block2ZeroEl = block2Collection[0];
+      if(block2ZeroEl != undefined){
+        var block2ZeroElChildren = block2ZeroEl.children;
+        var blck2ZrElChLen = block2ZeroElChildren.length;
 
-      for(var i=0; i<blck2ZrElChLen; i++){
-        var currEl = block2ZeroElChildren[i];
+        for(var i=0; i<blck2ZrElChLen; i++){
+          var currEl = block2ZeroElChildren[i];
 
-        if(currEl.className == 'rpad101'){
-          currEl.style.display = 'none';
-        }
+          if(currEl.className == 'adsbygoogle'){
+            currEl.style.display = 'none';
+          }
 
-        if(currEl.className.indexOf('banner') != -1){
-          currEl.style.display = 'none';
-        }
+          if(currEl.id == 'sticky-wrapper'){
+            currEl.style.display = 'none';
+          }
 
-        if(currEl.className.indexOf('adnet') != -1){
-          currEl.style.display = 'none';
+          if(currEl.className == 'rpad101'){
+            currEl.style.display = 'none';
+          }
+
+          if(currEl.className.indexOf('banner') != -1){
+            currEl.style.display = 'none';
+          }
+
+          if(currEl.className.indexOf('adnet') != -1){
+            currEl.style.display = 'none';
+          }
         }
       }
     }
+    setTimeout(block2Inclosure,2000);
   }
 
   this.bpost = function(){
