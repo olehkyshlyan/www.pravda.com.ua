@@ -7,6 +7,7 @@
 // @author       oleh.kyshlyan
 // @match        http://www.pravda.com.ua/articles/*
 // @match        https://www.pravda.com.ua/articles/*
+// @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -95,10 +96,14 @@ var UPArticles = new function(){
       var body = document.body;
       if(body != undefined){
         for(property of body.children){
-          if(property.className == 'layout'){
+          if(property.className.indexOf('layout') != -1){
             var layout = property;
             for(property of layout.children){
               if(property.className == 'unit_header-banner'){
+                property.style.display = 'none';
+              }
+
+              if(property.className == 'unit_top-banner'){
                 property.style.display = 'none';
               }
 
@@ -114,107 +119,56 @@ var UPArticles = new function(){
     setTimeout(layoutInclosure,2000);
   }
 
+  this.postComments = function(){
+    var postCommentsInclosure = function(){
+      var postComments = jQuery("BODY > DIV[class*='layout'] > DIV.main-content DIV.article__header > DIV.post__statistic > DIV.post__comments");
+      if(postComments.length == 1){
+        postComments.hide();
+      }
+    }
+    setTimeout(postCommentsInclosure,2000);
+  }
+
   this.postArticle = function(){
     var postArticleInclosure = function(){
-      var body = document.body;
-      if(body != undefined){
-        for(property of body.children){
-          if(property.className == 'layout'){
-            var layout = property;
-            for(property of layout.children){
-              if(property.className == 'main-content'){
-                var mainContent = property;
-                for(property of mainContent.children){
-                  if(property.className == 'layout-main'){
-                    var layoutMain = property;
-                    for(property of layoutMain.children){
-                      if(property.className.indexOf('clearfix') != -1){
-                        var clearfix = property;
-                        for(property of clearfix.children){
-                          if(property.className == 'col__fluid'){
-                            var colFluid = property;
-                            for(property of colFluid.children){
-                              if(property.className == 'col__fluid__inner'){
-                                var colFluidInner = property;
-                                for(property of colFluidInner.children){
-                                  if(property.className.indexOf('post_article') != -1){
-                                    var postArticle = property;
-
-                                    for(property of postArticle.children){
-                                      if(property.className == 'article__header'){
-                                        var articleHeader = property;
-                                        for(property of articleHeader.children){
-                                          if(property.className == 'post__statistic'){
-                                            var postStatistic = property;
-                                            for(property of postStatistic.children){
-                                              if(property.className == 'post__comments'){
-                                                property.style.display = 'none';
-                                              }
-                                            }
-                                            break;
-                                          }
-                                        }
-                                      }
-
-                                      if(property.className == 'post__social-container'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.tagName == 'BR'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.id.indexOf('admixer') != -1){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.tagName == 'IFRAME' && property.nextElementSibling.tagName == 'SPAN'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.tagName == 'SPAN' && property.previousElementSibling.tagName == 'IFRAME'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.className == 'post__social_bottom'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.className == 'unit_bottom-banner'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.tagName == "A" && property.name == 'comments'){
-                                        property.style.display = 'none';
-                                      }
-
-                                      if(property.className == 'block_comments'){
-                                        property.style.display = 'none';
-                                      }
-                                    }
-
-                                    break;
-                                  }
-                                }
-                                break;
-                              }
-                            }
-                            break;
-                          }
-                        }
-                        break;
-                      }
-                    }
-                    break;
-                  }
-                }
-                break;
-              }
-            }
-            break;
-          }
+      var postArticle = jQuery("BODY > DIV[class*='layout'] > DIV.main-content DIV[class*='post_article']");
+      jQuery(postArticle).children().each(function(index,element){
+        if(element.className == 'post__social-container'){
+          element.style.display = 'none';
         }
-      }
+
+        if(element.className == 'post__source'){
+          element.style.display = 'none';
+        }
+
+        if(element.tagName == 'BR'){
+          element.style.display = 'none';
+        }
+
+        if(element.id.indexOf('admixer') != -1){
+          element.style.display = 'none';
+        }
+
+        if(element.tagName == 'IFRAME' && element.nextElementSibling.tagName == 'SPAN'){
+          element.style.display = 'none';
+        }
+
+        if(element.tagName == 'SPAN' && element.previousElementSibling.tagName == 'IFRAME'){
+          element.style.display = 'none';
+        }
+
+        if(element.className == 'post__social_bottom'){
+          element.style.display = 'none';
+        }
+
+        if(element.tagName == 'A' && element.name == 'comments'){
+          element.style.display = 'none';
+        }
+
+        if(element.className == 'block_comments'){
+          element.style.display = 'none';
+        }
+      });
     }
     setTimeout(postArticleInclosure,2000);
   }
@@ -255,6 +209,19 @@ var UPArticles = new function(){
           if(property.tagName == 'P' && property.innerHTML == ''){
             property.style.display = 'none';
           }
+
+          if(property.tagName == 'DIV'){
+            for(subproperty of property.children){
+              if(subproperty.id.indexOf('mwayss') != -1){
+                //subproperty.parentElement.removeChild(subproperty);
+                subproperty.style.cssText += '; display: none !important;';
+              }
+              if(subproperty.tagName == 'DIV' && subproperty.innerHTML == ''){
+                //subproperty.parentElement.removeChild(subproperty);
+                subproperty.style.display = 'none';
+              }
+            }
+          }
         }
       }
     }
@@ -289,10 +256,28 @@ var UPArticles = new function(){
     setTimeout(colSidebarInclosure,3000);
   }
 
+  this.sideNewsContent = function(){
+    var sideNewsContentInclosure = function(){
+      var sideNewsContentCollection = document.getElementsByClassName('side-news-content');
+      var sideNewsContCollZeroEl = sideNewsContentCollection[0];
+      if(sideNewsContCollZeroEl != undefined){
+        jQuery(sideNewsContCollZeroEl).on('mouseover','.article',function(){
+          this.style.backgroundColor = 'rgb(255,127,80)';
+        });
+        jQuery(sideNewsContCollZeroEl).on('mouseout','.article',function(){
+          this.style.backgroundColor = 'transparent';
+        });
+      }
+    }
+    setTimeout(sideNewsContentInclosure,3000);
+  }
+
 }
 
 UPArticles.body();
 UPArticles.layout();
+UPArticles.postComments();
 UPArticles.postArticle();
 UPArticles.postNewsText();
 UPArticles.colSidebar();
+UPArticles.sideNewsContent();
