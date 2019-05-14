@@ -7,64 +7,9 @@
 // @author       oleh.kyshlyan
 // @match        http://life.pravda.com.ua/columns/*
 // @match        https://life.pravda.com.ua/columns/*
-// @require      https://code.jquery.com/jquery-3.3.1.min.js
+// @require      https://code.jquery.com/jquery-3.4.0.min.js
 // @grant        none
 // ==/UserScript==
-
-var NodesCircuit = new function(){
-  this.circuit = function(pn,cn){
-    var foundNode = null;
-    var howSearch;
-    var tagAttr;
-    var whatSearch;
-    var parentNode = pn;
-    var childNode = cn;
-
-    if(parentNode != undefined){
-      if(parentNode != null){
-        if(childNode != undefined){
-          if(childNode.childNode != undefined){
-            if(childNode.childNode.how != undefined){
-              howSearch = childNode.childNode.how;
-            }
-            if(childNode.childNode.attr != undefined){
-              tagAttr = childNode.childNode.attr;
-            }
-            if(childNode.childNode.what != undefined){
-              whatSearch = childNode.childNode.what;
-            }
-          }
-
-          if(howSearch != undefined){
-            if(whatSearch != undefined){
-              for(property of parentNode.children){
-                if(howSearch == 'tagName'){
-                  if(property.tagName == whatSearch){
-                    foundNode = property;
-                  }
-                }
-                if(howSearch == 'className'){
-                  if(property.className == whatSearch){
-                    foundNode = property;
-                  }
-                }
-                if(howSearch == 'indexOf'){
-                  if(tagAttr != undefined){
-                    if(property[tagAttr].indexOf(whatSearch) != -1){
-                      foundNode = property;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    return foundNode;
-  }
-}
 
 var LifePravdaColumns = new function(){
 
@@ -163,76 +108,50 @@ var LifePravdaColumns = new function(){
 
   this.articleColumn = function(){
     var articleColumnInclosure = function(){
-      var articleColumnCollection = document.getElementsByClassName('article-column');
-      var articleColumn = articleColumnCollection[0];
-      if(articleColumn != undefined){
-        var articleColumnChildren = articleColumn.children;
-        var artColChLen = articleColumnChildren.length;
-
-        for(var i=0; i<artColChLen; i++){
-          var artColChild = articleColumnChildren[i];
-
-          if(artColChild.className == 'article-wrap'){
-            var articleWrap = artColChild;
-            var artWrapChildren = articleWrap.children;
-            var artWrChLen = artWrapChildren.length;
-
-            for(var q=0; q<artWrChLen; q++){
-              var artWrChild = artWrapChildren[q];
-
-              if(artWrChild.className.indexOf('statistic-top-block') != -1){
-                var statTopBlock = artWrChild;
-                var stTopBlckChildren = statTopBlock.children;
-                var stTpBlChLen = stTopBlckChildren.length;
-
-                for(var w=0; w<stTpBlChLen; w++){
-                  var stTpBlChild = stTopBlckChildren[w];
-
-                  if(stTpBlChild.className == 'net-block'){
-                    stTpBlChild.style.display = 'none';
-                  }
-
-                  if(stTpBlChild.className.indexOf('comment') != -1){
-                    stTpBlChild.style.display = 'none';
-                  }
+      jQuery(function(){
+        var articleColumn = jQuery("BODY > DIV[class*='main'] > DIV[class*='article-page'] DIV.article-column");
+        if(articleColumn.length == 1){
+          articleColumn.children().each(function(index,element){
+            if(element.className.indexOf('statistic-top-block') != -1){
+              jQuery(element).children().each(function(lev2index,lev2element){
+                if(lev2element.className == 'net-block'){
+                  lev2element.style.display = 'none';
                 }
+
+                if(lev2element.className.indexOf('comment') != -1){
+                  lev2element.style.display = 'none';
+                }
+              });
+            }
+
+            if(element.className == 'net-wrap'){
+              element.style.display = 'none';
+            }
+
+            if(element.tagName == 'DIV'){
+              if(element.hasAttribute('id') == false && element.hasAttribute('class') == false){
+                jQuery(element).children().each(function(lev2index,lev2element){
+                  if(lev2element.tagName == 'IFRAME' && lev2element.nextElementSibling.tagName == 'SPAN'){
+                    element.style.display = 'none';
+                  }
+                });
               }
             }
-          }
 
-          if(artColChild.className == 'net-wrap'){
-            artColChild.style.display = 'none';
-          }
-
-          if(artColChild.tagName == 'DIV'){
-            if(artColChild.hasAttribute('id') == false && artColChild.hasAttribute('class') == false){
-              var iframeSpanBundle = artColChild;
-              var ifrSpnBndlChildren = iframeSpanBundle.children;
-              var ifrSpBnChLen = ifrSpnBndlChildren.length;
-
-              for(var a=0; a<ifrSpBnChLen; a++){
-                var ifrSpBnChild = ifrSpnBndlChildren[a];
-
-                if(ifrSpBnChild.tagName == 'IFRAME' && ifrSpBnChild.nextElementSibling.tagName == 'SPAN'){
-                  artColChild.style.display = 'none';
-                }
-              }
+            if(element.className == 'blurb'){
+              element.style.display = 'none';
             }
-          }
 
-          if(artColChild.className == 'blurb'){
-            artColChild.style.display = 'none';
-          }
+            if(element.tagName == 'A' && element.name == 'comments'){
+              element.style.display = 'none';
+            }
 
-          if(artColChild.tagName == 'A' && currEl.name == 'comments'){
-            artColChild.style.display = 'none';
-          }
-
-          if(artColChild.className.indexOf('fb-comments') != -1){
-            artColChild.style.display = 'none';
-          }
+            if(element.className.indexOf('fb-comments') != -1){
+              element.style.display = 'none';
+            }
+          });
         }
-      }
+      });
     }
     setTimeout(articleColumnInclosure,3000);
   }
