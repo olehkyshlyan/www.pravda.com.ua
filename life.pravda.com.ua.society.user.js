@@ -7,6 +7,7 @@
 // @author       oleh.kyshlyan
 // @match        http://life.pravda.com.ua/society/*
 // @match        https://life.pravda.com.ua/society/*
+// @require      https://code.jquery.com/jquery-3.4.0.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -51,124 +52,109 @@ var LifePravdaSociety = new function(){
 
   this.mainInterviewPage = function(){
     var mainIntPageInclosure = function(){
-      var mainInterviewPageCollection = document.getElementsByClassName('main interview-page');
-      if(mainInterviewPageCollection.length > 0){
-        var mainIntPageZeroEl = mainInterviewPageCollection[0];
-        if(mainIntPageZeroEl != undefined){
-          var mainIntPgZeroElChildren = mainIntPageZeroEl.children;
-          var mnIntPgZrElChLen = mainIntPgZeroElChildren.length;
-
-          for(var i=0; i<mnIntPgZrElChLen; i++){
-            var mIntPgChild = mainIntPgZeroElChildren[i];
-
-            if(mIntPgChild.className == 'pagewrap'){
-              var pagewrapHeader = mIntPgChild;
-              var pgwrapHeaderChildren = pagewrapHeader.children;
-              var pgwrHdrChLen = pgwrapHeaderChildren.length;
-
-              for(var q=0; q<pgwrHdrChLen; q++){
-                var pgwrHdChild = pgwrapHeaderChildren[q];
-
-                if(pgwrHdChild.className == 'banner'){
-                  pgwrHdChild.style.display = 'none';
-                }
-
-                if(pgwrHdChild.tagName == 'HEADER' && pgwrHdChild.className == 'header'){
-                  pgwrHdChild.style.marginLeft = '0px';
-                  pgwrHdChild.style.marginRight = '0px';
+      jQuery(function(){
+        var mainInterviewPage = jQuery("BODY > DIV[class*='main'][class*='interview-page']");
+        if(mainInterviewPage.length == 1){
+          mainInterviewPage.children().each(function(index,element){
+            if(element.className == 'pagewrap'){
+              for(property of element.children){
+                if(property.className == 'banner'){
+                  property.style.display = 'none';
                 }
               }
             }
 
-            if(mIntPgChild.tagName == 'DIV' && mIntPgChild.className.indexOf('pagewrap') != -1){
-              mIntPgChild.style.maxWidth = '1320px';
+            if(element.className == 'banner'){
+              element.style.display = 'none';
             }
 
-            if(mIntPgChild.id.indexOf('admixer') != -1){
-              mIntPgChild.style.display = 'none';
+            if(element.tagName == 'DIV' && element.className.indexOf('pagewrap') != -1){
+              element.style.maxWidth = '1320px';
             }
 
-            if(mIntPgChild.id.indexOf('mwayss') != -1){
-              mIntPgChild.style.display = 'none';
+            if(element.id.indexOf('admixer') != -1){
+              element.style.display = 'none';
             }
 
-            if(mIntPgChild.id.indexOf('adriver') != -1){
-              mIntPgChild.style.display = 'none';
+            if(element.id.indexOf('mwayss') != -1){
+              element.style.display = 'none';
             }
-          }
+
+            if(element.id.indexOf('adriver') != -1){
+              element.style.display = 'none';
+            }
+          });
         }
-      }
+      });
     }
     setTimeout(mainIntPageInclosure,3000);
   }
 
   this.articleColumn = function(){
     var articleColumnInclosure = function(){
-      var articleColumnCollection = document.getElementsByClassName('article-column');
-      if(articleColumnCollection.length > 0){
-        var articleColumn = articleColumnCollection[0];
-        if(articleColumn != undefined){
-          var artColumnChildren = articleColumn.children;
-          var artClChLen = artColumnChildren.length;
+      jQuery(function(){
+        var articleColumn = jQuery("BODY > DIV[class*='main'][class*='interview-page'] > DIV[class*='article-page'] DIV[class*='article-column']");
+        if(articleColumn.length != -1){
+          articleColumn.children().each(function(index,element){
+            if(element.className.indexOf('statistic-top-block') != -1){
+              for(property of element.children){
+                if(property.className == 'net-block'){
+                  property.style.display = 'none';
+                }
 
-          for(var i=0; i<artClChLen; i++){
-            var artColChild = artColumnChildren[i];
-
-            if(artColChild.className == 'article-wrap'){
-              var articleWrap = artColChild;
-              var statisticTopBlock = articleWrap.children[1];
-              if(statisticTopBlock != undefined){
-                var statTopBlockChildren = statisticTopBlock.children;
-                var stTopBkChLen = statTopBlockChildren.length;
-
-                for(var q=0; q<stTopBkChLen; q++){
-                  var stTpBkChild = statTopBlockChildren[q];
-
-                  if(stTpBkChild.className == 'net-block'){
-                    stTpBkChild.style.display = 'none';
-                  }
-
-                  if(stTpBkChild.className == 'comment-bottom-block'){
-                    stTpBkChild.style.display = 'none';
-                  }
+                if(property.className.indexOf('comment') != -1){
+                  property.style.display = 'none';
                 }
               }
             }
 
-            if(artColChild.className == 'net-wrap'){
-              artColChild.style.display = 'none';
+            if(element.className == 'net-wrap'){
+              element.style.display = 'none';
             }
 
-            if(artColChild.tagName == 'DIV'){
-              var iframeSpanBundle = artColChild;
-              var ifrSpnBundleChildren = iframeSpanBundle.children;
-              var ifrSpnBndlChLen = ifrSpnBundleChildren.length;
-
-              for(var w=0; w<ifrSpnBndlChLen; w++){
-                var crElIfrSnBun = ifrSpnBundleChildren[w];
-
-                if(crElIfrSnBun.tagName == 'IFRAME' && crElIfrSnBun.nextElementSibling.tagName == 'SPAN'){
-                  artColChild.style.display = 'none';
+            if(element.tagName == 'DIV'){
+              for(property of element.children){
+                if(property.tagName == 'IFRAME' && property.nextElementSibling.tagName == 'SPAN'){
+                  element.style.display = 'none';
                 }
               }
             }
 
-            if(artColChild.className == 'blurb'){
-              artColChild.style.display = 'none';
+            if(element.className == 'blurb'){
+              element.style.display = 'none';
             }
 
-            if(artColChild.tagName == 'A' && artColChild.name == 'comments'){
-              artColChild.style.display = 'none';
+            if(element.tagName == 'A' && element.name == 'comments'){
+              element.style.display = 'none';
             }
 
-            if(artColChild.className.indexOf('fb-comments') != -1){
-              artColChild.style.display = 'none';
+            if(element.className.indexOf('fb-comments') != -1){
+              element.style.display = 'none';
             }
-          }
+          });
         }
-      }
+      });
     }
     setTimeout(articleColumnInclosure,3000);
+  }
+
+  this.article = function(){
+    var articleInclosure = function(){
+      jQuery(function(){
+        var article = jQuery("BODY > DIV[class*='main'][class*='interview-page'] > DIV[class*='article-page'] DIV[class*='article-column'] > ARTICLE.article");
+        if(article.length != -1){
+          article.children().each(function(index,element){
+            if(element.tagName == 'P'){
+              var tagEm = jQuery(element).find("EM:contains('Ми хочемо тримати з вами'),EM:contains('А якщо хочете бути в курсі')");
+              if(tagEm.length > 0){
+                element.style.display = 'none';
+              }
+            }
+          });
+        }
+      });
+    }
+    setTimeout(articleInclosure,3000);
   }
 
   this.sidebar = function(){
@@ -200,9 +186,24 @@ var LifePravdaSociety = new function(){
     setTimeout(sidebarInclosure,2000);
   }
 
+  this.pagePoint = function(){
+    var pagePointInclosure = function(){
+      var pagePointCollection = document.getElementsByClassName('pagewrap page-point');
+      if(pagePointCollection.length > 0){
+        var pagePointZeroEl = pagePointCollection[0];
+        if(pagePointZeroEl != undefined){
+          pagePointZeroEl.style.display = 'none';
+        }
+      }
+    }
+    setTimeout(pagePointInclosure,2000);
+  }
+
 }
 
 LifePravdaSociety.body();
 LifePravdaSociety.mainInterviewPage();
 LifePravdaSociety.articleColumn();
+LifePravdaSociety.article();
 LifePravdaSociety.sidebar();
+LifePravdaSociety.pagePoint();
