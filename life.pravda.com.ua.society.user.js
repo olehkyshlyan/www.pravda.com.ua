@@ -145,7 +145,7 @@ var LifePravdaSociety = new function(){
         if(article.length != -1){
           article.children().each(function(index,element){
             if(element.tagName == 'P'){
-              var tagEm = jQuery(element).find("EM:contains('Ми хочемо тримати з вами'),EM:contains('А якщо хочете бути в курсі')");
+              var tagEm = jQuery(element).find("EM:contains('Ми хочемо тримати з вами'),EM:contains('Ми не хочемо втрачати з вами'),EM:contains('А якщо хочете бути в курсі')");
               if(tagEm.length > 0){
                 element.style.display = 'none';
               }
