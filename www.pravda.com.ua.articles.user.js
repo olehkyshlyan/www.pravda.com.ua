@@ -7,7 +7,7 @@
 // @author       oleh.kyshlyan
 // @match        http://www.pravda.com.ua/articles/*
 // @match        https://www.pravda.com.ua/articles/*
-// @require      https://code.jquery.com/jquery-3.3.1.min.js
+// @require      https://code.jquery.com/jquery-3.4.0.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -161,6 +161,10 @@ var UPArticles = new function(){
           element.style.display = 'none';
         }
 
+        if(element.className == 'unit_bottom-banner'){
+          element.style.display = 'none';
+        }
+
         if(element.tagName == 'A' && element.name == 'comments'){
           element.style.display = 'none';
         }
@@ -175,55 +179,55 @@ var UPArticles = new function(){
 
   this.postNewsText = function(){
     var postNewsTextInclosure = function(){
-      var body = document.body;
-      if(body != undefined){
-        var layout = NodesCircuit.circuit(body,{childNode:{how:'className',what:'layout'}});
-        var mainContent = NodesCircuit.circuit(layout,{childNode:{how:'className',what:'main-content'}});
-        var layoutMain = NodesCircuit.circuit(mainContent,{childNode:{how:'className',what:'layout-main'}});
-        var clearfix = NodesCircuit.circuit(layoutMain,{childNode:{how:'indexOf',attr:'className',what:'clearfix'}});
-        var colFluid = NodesCircuit.circuit(clearfix,{childNode:{how:'className',what:'col__fluid'}});
-        var colFluidInner = NodesCircuit.circuit(colFluid,{childNode:{how:'className',what:'col__fluid__inner'}});
-        var postArticle = NodesCircuit.circuit(colFluidInner,{childNode:{how:'indexOf',attr:'className',what:'post_article'}});
-        var postNewsText = NodesCircuit.circuit(postArticle,{childNode:{how:'className',what:'post_news__text'}});
-        for(property of postNewsText.children){
-          if(property.id.indexOf('admixer') != -1){
-            property.style.display = 'none';
-          }
-
-          if(property.className == 'adsbygoogle'){
-            property.style.display = 'none';
-          }
-
-          for(subproperty of property.children){
-            if(subproperty.className == 'adsbygoogle'){
-              subproperty.style.display = 'none';
-            }
-          }
-
-          for(subproperty of property.children){
-            if(subproperty.id.indexOf('adriver') != -1){
-              subproperty.style.display = 'none';
-            }
-          }
-
-          if(property.tagName == 'P' && property.innerHTML == ''){
-            property.style.display = 'none';
-          }
-
-          if(property.tagName == 'DIV'){
-            for(subproperty of property.children){
-              if(subproperty.id.indexOf('mwayss') != -1){
-                //subproperty.parentElement.removeChild(subproperty);
-                subproperty.style.cssText += '; display: none !important;';
-              }
-              if(subproperty.tagName == 'DIV' && subproperty.innerHTML == ''){
-                //subproperty.parentElement.removeChild(subproperty);
-                subproperty.style.display = 'none';
+      jQuery(function(){
+        var postNewsText = jQuery("BODY > DIV[class*='layout'] > DIV[class*='main-content'] > DIV[class*='layout-main'] DIV[class*='col__fluid__inner'] > DIV[class*='post_article'] > DIV[class*='post_news__text']");
+        if(postNewsText.length == 1){
+          postNewsText.children().each(function(index,element){
+            if(element.tagName == 'DIV'){
+              for(property of element.children){
+                if(property.id.indexOf('MarketGid') != -1 || property.className.indexOf('MarketGid') != -1){
+                  element.style.display = 'none';
+                }
               }
             }
-          }
+
+            if(element.id.indexOf('admixer') != -1){
+              element.style.display = 'none';
+            }
+
+            if(element.className == 'adsbygoogle'){
+              element.style.display = 'none';
+            }
+
+            for(property of element.children){
+              if(property.className == 'adsbygoogle'){
+                property.style.display = 'none';
+              }
+            }
+
+            for(property of element.children){
+              if(property.className == 'adriver'){
+                property.style.display = 'none';
+              }
+            }
+
+            if(element.tagName == 'P' && element.innerHTML == ''){
+              element.style.display = 'none';
+            }
+
+            if(element.tagName == 'DIV'){
+              for(property of element.children){
+                if(property.id.indexOf('mwayss') != -1){
+                  property.style.cssText += '; display: none !important;';
+                }
+                if(property.tagName == 'DIV' && property.innerHTML == ''){
+                  subproperty.style.display = 'none';
+                }
+              }
+            }
+          });
         }
-      }
+      });
     }
     setTimeout(postNewsTextInclosure,3000);
   }
