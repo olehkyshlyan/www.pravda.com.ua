@@ -7,240 +7,169 @@
 // @author       oleh.kyshlyan
 // @match        http://tabloid.pravda.com.ua/lounge/*
 // @match        https://tabloid.pravda.com.ua/lounge/*
+// @require      https://code.jquery.com/jquery-3.4.0.min.js
 // @grant        none
 // ==/UserScript==
 
 var TabloIDLounge = new function(){
 
   this.body = function(){
-
     var bodyInclosure = function(){
       var body = document.body;
+      if(body != undefined){
+        body.style.backgroundColor = 'rgb(204,208,211)';
+        body.style.backgroundImage = 'none';
+        body.style.backgroundRepeat = 'repeat';
+        body.style.backgroundAttachment = 'scroll';
+        body.style.backgroundPosition = '0% 0%';
 
-      //body.style.backgroundColor = 'transparent';
-      body.style.backgroundImage = 'none';
-      body.style.backgroundRepeat = 'repeat';
-      body.style.backgroundAttachment = 'scroll';
-      body.style.backgroundPosition = '0% 0%';
+        var bodyChildren = body.children;
+        var bdChLen = bodyChildren.length;
 
-      var bodyChildren = body.children;
-      var bdChLen = bodyChildren.length;
+        for(var i=0; i<bdChLen; i++){
+          var currEl = bodyChildren[i];
 
-      for(var i=0; i<bdChLen; i++){
-        var currEl = bodyChildren[i];
+          if(currEl.tagName == 'IFRAME'){
+            currEl.style.display = 'none';
+          }
 
-        if(currEl.tagName == 'IFRAME'){
-          currEl.style.display = 'none';
-        }
+          if(currEl.tagName == 'IMG'){
+            currEl.style.display = 'none';
+          }
 
-        if(currEl.tagName == 'IMG'){
-          currEl.style.display = 'none';
+          if(currEl.className == 'article_wide_banner_mobile'){
+            currEl.style.display = 'none';
+          }
         }
       }
     }
     setTimeout(bodyInclosure,2000);
   }
 
-  this.main2Form = function(){
-    var main2 = document.getElementById('main2');
-    var form = main2.children[0];
-    if(form != undefined && form.tagName == 'FORM'){
-      var formCSSStyle = window.getComputedStyle(form);
-      var formMarginTop = formCSSStyle.getPropertyValue("margin-top");
-      if(formMarginTop == '2px'){
-        form.style.marginTop = '4px';
-      }
+  this.topPostComments = function(){
+    var topPostCommentsInclosure = function(){
+      jQuery(function(){
+        var topPostComments = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > ASIDE[class*='post__service'] > DIV[class*='post__statistic'] > DIV[class*='post__comments']");
+        if(topPostComments.length == 1){
+          topPostComments.hide();
+        }
+      });
     }
+    setTimeout(topPostCommentsInclosure,2000);
   }
 
-  this.ttZeroElChildren = function(){
-    var ttCollection = document.getElementsByClassName('tt');
-    var ttZeroEl = ttCollection[0];
-    var ttZeroElChildren = ttZeroEl.children;
-    var ttZElChLength = ttZeroElChildren.length;
-    for(var i=0; i<ttZElChLength; i++){
-      var currEl = ttZeroElChildren[i];
+  this.blockPost = function(){
+    var blockPostInclosure = function(){
+      jQuery(function(){
+        var blockPost = jQuery("BODY > MAIN.wrap ARTICLE[class*='post'] DIV[class*='block_post']");
+        blockPost.children().each(function(index,element){
+          if(element.id.indexOf('go2net') != -1){
+            element.style.display = 'none';
+          }
 
-      if(currEl.id.indexOf('admixer') != -1){
-        currEl.style.display = 'none';
-      }
+          if(element.tagName == 'A' && element.name == 'comments'){
+            element.style.display = 'none';
+          }
 
-      if(currEl.id.indexOf('adriver') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.id.indexOf('adnet') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.id.indexOf('go2net') != -1){
-        currEl.style.display = 'none';
-      }
+          if(element.className == 'post__comments'){
+            element.style.display = 'none';
+          }
+        });
+      });
     }
+    setTimeout(blockPostInclosure,2000);
   }
 
-  this.tt2ZeroElParentChildren = function(){
-    var tt2Collection = document.getElementsByClassName('tt2');
-    var tt2Zero = tt2Collection[0];
-    var tt2ZeroParent = tt2Zero.parentElement;
-    var tt2ZrParChildren = tt2ZeroParent.children;
-    var tt2ZrParChLength = tt2ZrParChildren.length;
-
-    for(var i=0;i<tt2ZrParChLength;i++){
-      var currEl = tt2ZrParChildren[i];
-      if(currEl.tagName == 'DIV' && currEl.className == 'sp'){
-        currEl.style.display = 'none';
+  this.postText = function(){
+    var postTextInclosure = function(){
+      var postText = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > DIV[class*='block_post'] > DIV[class*='post__text']");
+      if(postText.length == 1){
+        postText.children().each(function(index,element){
+          if(element.tagName == 'DIV'){
+            var adsByGoogle = jQuery(element).children("INS[class*='adsbygoogle']");
+            if(adsByGoogle.length == 1){
+              element.style.display = 'none';
+            }
+          }
+        });
       }
     }
+    setTimeout(postTextInclosure,2000);
   }
 
-  this.tt2ZeroElChildren = function(){
-    var tt2Collection = document.getElementsByClassName('tt2');
-    var tt2ZeroEl = tt2Collection[0];
-    var tt2ZeroElChildren = tt2ZeroEl.children;
-    var tt2ZElChLength = tt2ZeroElChildren.length;
-    for(var i=0; i<tt2ZElChLength; i++){
-      var currEl = tt2ZeroElChildren[i];
+  this.layoutArticleSidebar = function(){
+    var layoutArticleSidebarInclosure = function(){
+      jQuery(function(){
+        var layoutArticleSidebar = jQuery("BODY > MAIN[class*='wrap'] > DIV[class*='layout'] > ASIDE[class*='layout_article_sidebar']");
+        if(layoutArticleSidebar.length == 1){
+          layoutArticleSidebar.children().each(function(index,element){
+            if(element.className.indexOf('banner') != -1){
+              element.style.display = 'none';
+            }
 
-      if(currEl.className == 'socialb1'){
-        currEl.style.display = 'none';
-      }
+            if(element.className.indexOf('block_article_sidebar') != -1){
+              element.style.marginTop = '20px';
+            }
 
-      if(currEl.className == 'text'){
-        var br = currEl.children[0];
-        if(br.tagName == 'BR'){
-          br.style.display = 'none';
+            if(element.id.indexOf('sticky-wrapper') != -1){
+              element.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+    setTimeout(layoutArticleSidebarInclosure,2000);
+  }
+
+  this.endless = function(){
+    var endlessInclosure = function(){
+      jQuery(function(){
+        var blockBanner = jQuery("BODY > DIV[class*='last'] > DIV[class*='layout'] > DIV[id*='endless'] > DIV[class*='block_banner']");
+        if(blockBanner.length == 1){
+          blockBanner.hide();
+        }
+      });
+    }
+    setTimeout(endlessInclosure,2000);
+  }
+
+  this.onScrollElements = function(){
+    jQuery(function(){
+      var wrapperSticky = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > DIV[class*='block_post'] > DIV[class*='post__text'] > DIV[class*='wrapper-sticky']");
+      var postSocialSide = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > DIV[class*='block_post'] > DIV[class*='post__text'] > DIV[class*='wrapper-sticky'] > DIV[class*='post__social__side']");
+      if(wrapperSticky.length == 1){
+        var wrapperStickyOriginalClass = wrapperSticky.attr("class");
+        if(postSocialSide.length == 1){
+          var postSocialSideOriginalClass = postSocialSide.attr("class");
+          var postSocialSideOriginalStyle = postSocialSide.attr("style");
         }
       }
 
-      if(currEl.className == 'socialb2'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.id.indexOf('go2net') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('adpartner') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.name == 'comments'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.className.indexOf('fb-comments') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.className.indexOf('admixer') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('ScriptRoot') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('riainfo') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('holder') != -1){
-        currEl.style.display = 'none';
-      }
-    }
-  }
-
-  this.tt3ZeroElChildren = function(){
-    var tt3Collection = document.getElementsByClassName('tt3');
-    var tt3ZeroEl = tt3Collection[0];
-    var tt3ZeroElChildren = tt3ZeroEl.children;
-    var tt3ZElChLength = tt3ZeroElChildren.length;
-
-    for(var i=0;i<tt3ZElChLength;i++){
-      var currEl = tt3ZeroElChildren[i];
-
-      if(currEl.tagName == 'DIV' && currEl.id == 'link11'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.getAttribute("style") == 'padding-bottom:2px'){
-        var ceNxtElSib = currEl.nextElementSibling;
-        if(ceNxtElSib.tagName == 'DIV' && ceNxtElSib.className == 'p1' && ceNxtElSib.innerHTML == 'Новини'){
-          currEl.style.display = 'none';
+      jQuery(window).on('scroll',function(){
+        if(wrapperSticky.length == 1){
+          if(wrapperSticky.attr("class").indexOf('sticky-active') != -1){
+            var wrapperStickyScrolledClass = wrapperSticky.attr("class");
+            wrapperSticky.attr("class",wrapperStickyOriginalClass);
+          }
+          if(postSocialSide.length == 1){
+            if(postSocialSide.attr("class").indexOf('sticky') != -1){
+              postSocialSide.attr("class",postSocialSideOriginalClass);
+            }
+            if(postSocialSide.attr("style").indexOf('fixed') != -1 || postSocialSide.attr("style").indexOf('absolute') != -1){
+              postSocialSide.attr("style",postSocialSideOriginalStyle);
+            }
+          }
         }
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('admixer') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('adriver') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('phoenix') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'BR'){
-        currEl.style.display = 'none';
-      }
-    }
-  }
-
-  this.tt2FirstElChildren = function(){
-    var tt2Collection = document.getElementsByClassName('tt2');
-    var tt2FirstEl = tt2Collection[1];
-    tt2FirstEl.style.marginTop = '12px';
-    var tt2FirstElChildren = tt2FirstEl.children;
-    var tt2FElChLength = tt2FirstElChildren.length;
-    for(var i=0; i<tt2FElChLength; i++){
-      var currEl = tt2FirstElChildren[i];
-
-      if(currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-    }
-  }
-
-  this.tt3FirstElChildren = function(){
-    var tt3Collection = document.getElementsByClassName('tt3');
-    var tt3FirstEl = tt3Collection[1];
-    tt3FirstEl.style.marginTop = '12px';
-    var tt3FirstElChildren = tt3FirstEl.children;
-    var tt3FElChLength = tt3FirstElChildren.length;
-    for(var i=0; i<tt3FElChLength; i++){
-      var currEl = tt3FirstElChildren[i];
-
-      if(currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-    }
-  }
-
-  this.tt4ZeroEl = function(){
-    var tt4Collection = document.getElementsByClassName('tt4');
-    var tt4ZeroEl = tt4Collection[0];
-    tt4ZeroEl.style.display = 'none';
+      });
+    });
   }
 
 }
 
 TabloIDLounge.body();
-TabloIDLounge.main2Form();
-TabloIDLounge.ttZeroElChildren();
-TabloIDLounge.tt2ZeroElParentChildren();
-TabloIDLounge.tt2ZeroElChildren();
-TabloIDLounge.tt3ZeroElChildren();
-TabloIDLounge.tt2FirstElChildren();
-TabloIDLounge.tt3FirstElChildren();
-TabloIDLounge.tt4ZeroEl();
+TabloIDLounge.topPostComments();
+TabloIDLounge.blockPost();
+TabloIDLounge.postText();
+TabloIDLounge.layoutArticleSidebar();
+TabloIDLounge.endless();
+TabloIDLounge.onScrollElements();
