@@ -40,6 +40,10 @@ var TabloIDFocus = new function(){
             property.style.display = 'none';
           }
 
+          if(property.className == 'last'){
+            property.style.paddingBottom = '15px';
+          }
+
           if(property.id == 'fb-root'){
             property.style.display = 'none';
           }
@@ -83,6 +87,14 @@ var TabloIDFocus = new function(){
               }
             }
 
+            if(element.tagName == 'IFRAME' && element.nextElementSibling.tagName == 'SPAN'){
+              element.style.display = 'none';
+            }
+
+            if(element.tagName == 'SPAN' && element.previousElementSibling.tagName == 'IFRAME'){
+              element.style.display = 'none';
+            }
+
             if(element.tagName == 'A' && element.name == 'comments'){
               element.style.display = 'none';
             }
@@ -122,6 +134,16 @@ var TabloIDFocus = new function(){
                 }
               }
             }
+
+            if(element.tagName == 'P'){
+              var spanTag = jQuery(element).children("SPAN");
+              if(spanTag.length == 1){
+                var emptySpan = spanTag.is(":empty");
+                if(emptySpan == true){
+                  element.style.display = 'none';
+                }
+              }
+            }
           });
         }
       });
@@ -153,10 +175,39 @@ var TabloIDFocus = new function(){
     setTimeout(layoutArticleSidebarInclosure,2000);
   }
 
-  this.lastEndlessBanner = function(){
-    var lastEndlessBannerInclosure = function(){
+  this.blockArticleSidebar = function(){
+    var blockArticleSidebarInclosure = function(){
       jQuery(function(){
-        var lastEndlessBanner = jQuery("BODY > DIV[class*='last'] > DIV[class*='layout'] > DIV[id*='endless'] > DIV[class*='banner']");
+        var blockArticleSidebar = jQuery("BODY > MAIN[class*='wrap'] > DIV[class*='layout'] > ASIDE[class*='article_sidebar'] > DIV[class*='block_article_sidebar']");
+        if(blockArticleSidebar.length == 1){
+          blockArticleSidebar.children().each(function(index,element){
+            if(element.tagName == 'ARTICLE' && element.className.indexOf('article_news') != -1){
+              var articleMedia = jQuery(element).find("DIV[class='article__media']");
+              if(articleMedia.length == 1){
+                articleMedia.css({"position":"absolute","top":"0px","z-index":"1","overflow":"hidden","height":"100%"});
+              }
+              var articleContent = jQuery(element).find("DIV[class='article__content']");
+              if(articleContent.length == 1){
+                articleContent.css({"position":"static","z-index":"2"});
+              }
+            }
+          });
+        }
+      });
+    }
+    setTimeout(blockArticleSidebarInclosure,3000);
+  }
+
+  this.lastEndlessBanner = function(){
+    //alert('Here 1');
+    var lastEndlessBannerInclosure = function(){
+      //alert('Here 2');
+      jQuery(function(){
+        //alert('Here 3');
+        var lastEndlessBanner = jQuery("BODY > DIV[class*='last'] > DIV[class*='layout'] > DIV[id='endless'] > DIV[class*='banner']");
+        //alert('lastEndlessBanner: '+lastEndlessBanner);
+        //alert('lastEndlessBanner.jquery: '+lastEndlessBanner.jquery);
+        //alert('lastEndlessBanner.length: '+lastEndlessBanner.length);
         if(lastEndlessBanner.length == 1){
           lastEndlessBanner.hide();
         }
@@ -165,7 +216,7 @@ var TabloIDFocus = new function(){
     setTimeout(lastEndlessBannerInclosure,2000);
   }
 
-  this.onScrollCircleElements = function(){
+  this.onScrollElements = function(){
     jQuery(function(){
       var nav = jQuery("BODY > HEADER[class*='header'] > NAV[class*='nav']");
       if(nav.length == 1){
@@ -173,6 +224,7 @@ var TabloIDFocus = new function(){
         jQuery(window).on('scroll',function(){
           if(nav.attr('class').indexOf('sticky') != -1){
             nav.attr('class',originalNavClass);
+            nav.attr('style','position: static;');
           }
         });
       }
@@ -212,5 +264,6 @@ TabloIDFocus.topPostComments();
 TabloIDFocus.blockPost();
 TabloIDFocus.postText();
 TabloIDFocus.layoutArticleSidebar();
+TabloIDFocus.blockArticleSidebar();
 TabloIDFocus.lastEndlessBanner();
-TabloIDFocus.onScrollCircleElements();
+TabloIDFocus.onScrollElements();
