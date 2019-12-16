@@ -199,15 +199,9 @@ var TabloIDFocus = new function(){
   }
 
   this.lastEndlessBanner = function(){
-    //alert('Here 1');
     var lastEndlessBannerInclosure = function(){
-      //alert('Here 2');
       jQuery(function(){
-        //alert('Here 3');
         var lastEndlessBanner = jQuery("BODY > DIV[class*='last'] > DIV[class*='layout'] > DIV[id='endless'] > DIV[class*='banner']");
-        //alert('lastEndlessBanner: '+lastEndlessBanner);
-        //alert('lastEndlessBanner.jquery: '+lastEndlessBanner.jquery);
-        //alert('lastEndlessBanner.length: '+lastEndlessBanner.length);
         if(lastEndlessBanner.length == 1){
           lastEndlessBanner.hide();
         }
