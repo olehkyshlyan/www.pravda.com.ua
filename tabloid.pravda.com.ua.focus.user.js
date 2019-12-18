@@ -133,6 +133,14 @@ var TabloIDFocus = new function(){
                   property.style.display = 'none';
                 }
               }
+              element.style.marginBottom = '10px';
+            }
+
+            if(element.tagName == 'P'){
+              var emptyPTag = jQuery(element).is(":empty");
+              if(emptyPTag == true){
+                element.style.display = 'none';
+              }
             }
 
             if(element.tagName == 'P'){
