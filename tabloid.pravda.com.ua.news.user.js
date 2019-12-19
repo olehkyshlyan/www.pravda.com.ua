@@ -7,189 +7,260 @@
 // @author       oleh.kyshlyan
 // @match        http://tabloid.pravda.com.ua/news/*
 // @match        https://tabloid.pravda.com.ua/news/*
+// @require      https://code.jquery.com/jquery-3.4.0.min.js
 // @grant        none
 // ==/UserScript==
 
 var TabloIDNews = new function(){
-  this.bodyBackgroundStyle = function(){
-    var body = document.body;
-    var bodyBgrStInclosure = function(){
-      //body.style.backgroundColor = 'transparent';
-      body.style.backgroundImage = 'none';
-      body.style.backgroundRepeat = 'repeat';
-      body.style.backgroundAttachment = 'scroll';
-      body.style.backgroundPosition = '0% 0%';
-    }
-    setTimeout(bodyBgrStInclosure,2000);
-  }
 
-  this.main2Form = function(){
-    var main2 = document.getElementById('main2');
-    var form = main2.children[0];
-    if(form != undefined && form.tagName == 'FORM'){
-      var formCSSStyle = window.getComputedStyle(form);
-      var formMarginTop = formCSSStyle.getPropertyValue("margin-top");
-      if(formMarginTop == '2px'){
-        form.style.marginTop = '4px';
-      }
-    }
-  }
+  this.body = function(){
+    var bodyInclosure = function(){
+      var body = document.body;
+      if(body != undefined){
+        body.style.backgroundColor = 'rgb(204,208,211)';
+        body.style.backgroundImage = 'none';
+        body.style.backgroundRepeat = 'repeat';
+        body.style.backgroundAttachment = 'scroll';
+        body.style.backgroundPosition = '0% 0%';
 
-  this.ttZeroElChildren = function(){
-    var ttCollection = document.getElementsByClassName('tt');
-    var ttZeroEl = ttCollection[0];
-    var ttZeroElChildren = ttZeroEl.children;
-    var ttZElChLength = ttZeroElChildren.length;
-    for(var i=0; i<ttZElChLength; i++){
-      var currEl = ttZeroElChildren[i];
+        for(property of body.children){
+          if(property.tagName == 'A' && property.id.indexOf('ar') == 0){
+            property.style.display = 'none';
+          }
 
-      if(currEl.id.indexOf('admixer') != -1){
-        currEl.style.display = 'none';
-      }
+          if(property.id.indexOf('banner') != -1){
+            property.style.display = 'none';
+          }
 
-      if(currEl.id.indexOf('adnet') != -1){
-        currEl.style.display = 'none';
-      }
+          if(property.className.indexOf('banner') != -1){
+            property.style.display = 'none';
+          }
 
-      if(currEl.id.indexOf('go2net') != -1){
-        currEl.style.display = 'none';
-      }
-    }
-  }
+          if(property.tagName == 'IFRAME'){
+            property.style.display = 'none';
+          }
 
-  this.tt2ZeroElParentChildren = function(){
-    var tt2Collection = document.getElementsByClassName('tt2');
-    var tt2Zero = tt2Collection[0];
-    var tt2ZeroParent = tt2Zero.parentElement;
-    var tt2ZrParChildren = tt2ZeroParent.children;
-    var tt2ZrParChLength = tt2ZrParChildren.length;
+          if(property.tagName == 'IMG'){
+            property.style.display = 'none';
+          }
 
-    for(var i=0;i<tt2ZrParChLength;i++){
-      var currEl = tt2ZrParChildren[i];
-      if(currEl.tagName == 'DIV' && currEl.className == 'sp'){
-        currEl.style.display = 'none';
-      }
-    }
-  }
+          if(property.className == 'last'){
+            property.style.paddingBottom = '15px';
+          }
 
-  this.tt2ZeroElChildren = function(){
-    var tt2Collection = document.getElementsByClassName('tt2');
-    var tt2ZeroEl = tt2Collection[0];
-    var tt2ZeroElChildren = tt2ZeroEl.children;
-    var tt2ZElChLength = tt2ZeroElChildren.length;
-    for(var i=0; i<tt2ZElChLength; i++){
-      var currEl = tt2ZeroElChildren[i];
+          if(property.id == 'fb-root'){
+            property.style.display = 'none';
+          }
 
-      if(currEl.className == 'socialb1'){
-        currEl.style.display = 'none';
-      }
+          if(property.className == 'empty'){
+            property.style.display = 'none';
+          }
 
-      if(currEl.className == 'text'){
-        var br = currEl.children[0];
-        if(br.tagName == 'BR'){
-          br.style.display = 'none';
+          if(property.id.indexOf('go2net') != -1){
+            property.style.display = 'none';
+          }
+
+          if(property.id.indexOf('webpush') != -1){
+            property.style.display = 'none';
+          }
         }
       }
-
-      if(currEl.className == 'socialb2'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.name == 'comments'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.className.indexOf('fb-comments') != -1){
-        currEl.style.display = 'none';
-      }
     }
+    setTimeout(bodyInclosure,2000);
   }
 
-  this.tt3ZeroElChildren = function(){
-    var tt3Collection = document.getElementsByClassName('tt3');
-    var tt3ZeroEl = tt3Collection[0];
-    var tt3ZrElChildren = tt3ZeroEl.children;
-    var tt3ZrElChLength = tt3ZrElChildren.length;
+  this.topPostComments = function(){
+    var topPostCommentsInclosure = function(){
+      jQuery(function(){
+        var postComments = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > ASIDE[class*='post__service'] > DIV[class*='post__statistic'] > DIV[class*='post__comments']");
+        if(postComments.length == 1){
+          postComments.hide();
+        }
+      });
+    }
+    setTimeout(topPostCommentsInclosure,2000);
+  }
 
-    for(var i=0;i<tt3ZrElChLength;i++){
-      var currEl = tt3ZrElChildren[i];
+  this.blockPost = function(){
+    var blockPostInclosure = function(){
+      jQuery(function(){
+        var blockPost = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > DIV[class*='block_post']");
+        if(blockPost.length == 1){
+          blockPost.children().each(function(index,element){
+            if(element.id.indexOf('go2net') != -1){
+              element.style.display = 'none';
+            }
 
-      if(currEl.tagName == 'DIV' && currEl.id == 'link11'){
-        currEl.style.display = 'none';
+            if(element.tagName == 'CENTER'){
+              for(property of element.children){
+                if(property.id.indexOf('adriver') != -1){
+                  element.style.display = 'none';
+                }
+              }
+            }
+
+            if(element.tagName == 'IFRAME' && element.nextElementSibling.tagName == 'SPAN'){
+              element.style.display = 'none';
+            }
+
+            if(element.tagName == 'SPAN' && element.previousElementSibling.tagName == 'IFRAME'){
+              element.style.display = 'none';
+            }
+
+            if(element.tagName == 'A' && element.name == 'comments'){
+              element.style.display = 'none';
+            }
+
+            if(element.className == 'post__comments'){
+              element.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+    setTimeout(blockPostInclosure,2000);
+  }
+
+  this.postText = function(){
+    var postTextInclosure = function(){
+      jQuery(function(){
+        var postText = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > DIV[class*='block_post'] > DIV[class*='post__text']");
+        if(postText.length == 1){
+          postText.children().each(function(index,element){
+            if(element.tagName == 'DIV'){
+              for(property of element.children){
+                if(property.className == 'adsbygoogle'){
+                  element.style.display = 'none';
+                }
+              }
+            }
+
+            if(element.tagName == 'TABLE'){
+              var tableIMG = jQuery(element).has("IMG[src*='pravda.com/images']");
+              if(tableIMG.length == 1){
+                jQuery(element).css({"margin-top":"20px","margin-bottom":"20px"});
+              }
+            }
+
+            if(element.className.indexOf('image-box') != -1){
+              for(property of element.children){
+                if(property.className.indexOf('image-box__caption') != -1 && property.innerHTML == ''){
+                  property.style.display = 'none';
+                }
+
+                if(property.className.indexOf('image-box__author') != -1 && property.innerHTML == ''){
+                  property.style.display = 'none';
+                }
+              }
+              element.style.marginBottom = '10px';
+            }
+
+            if(element.tagName == 'P'){
+              var emptyPTag = jQuery(element).is(":empty");
+              if(emptyPTag == true){
+                element.style.display = 'none';
+              }
+            }
+
+            if(element.tagName == 'P'){
+              var spanTag = jQuery(element).children("SPAN");
+              if(spanTag.length == 1){
+                var emptySpan = spanTag.is(":empty");
+                if(emptySpan == true){
+                  element.style.display = 'none';
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+    setTimeout(postTextInclosure,2000);
+  }
+
+  this.layoutArticleSidebar = function(){
+    var layoutArticleSidebarInclosure = function(){
+      jQuery(function(){
+        var layoutArticleSidebar = jQuery("BODY > MAIN[class*='wrap'] > DIV[class*='layout'] > ASIDE[class*='article_sidebar']");
+        if(layoutArticleSidebar.length == 1){
+          layoutArticleSidebar.children().each(function(index,element){
+            if(element.className.indexOf('banner') != -1){
+              element.style.display = 'none';
+            }
+
+            if(element.className.indexOf('block_article_sidebar_news') != -1){
+              element.style.marginTop = '20px';
+            }
+
+            if(element.id.indexOf('sticky') != -1 || element.className.indexOf('sticky') != -1){
+              element.style.display = 'none';
+            }
+          });
+        }
+      });
+    }
+    setTimeout(layoutArticleSidebarInclosure,2000);
+  }
+
+  this.lastEndlessBanner = function(){
+    var lastEndlessBannerInclosure = function(){
+      jQuery(function(){
+        var lastEndlessBanner = jQuery("BODY > DIV[class*='last'] > DIV[class*='layout'] > DIV[id='endless'] > DIV[class*='banner']");
+        if(lastEndlessBanner.length == 1){
+          lastEndlessBanner.hide();
+        }
+      });
+    }
+    setTimeout(lastEndlessBannerInclosure,2000);
+  }
+
+  this.onScrollElements = function(){
+    jQuery(function(){
+      var nav = jQuery("BODY > HEADER[class*='header'] > NAV[class*='nav']");
+      if(nav.length == 1){
+        var originalNavClass = nav.attr('class');
+        jQuery(window).on('scroll',function(){
+          if(nav.attr('class').indexOf('sticky') != -1){
+            nav.attr('class',originalNavClass);
+            nav.attr('style','position: static;');
+          }
+        });
       }
 
-      if(currEl.tagName == 'DIV' && currEl.getAttribute("style") == 'padding-bottom:2px'){
-        var ceNxtElSib = currEl.nextElementSibling;
-        if(ceNxtElSib.tagName == 'DIV' && ceNxtElSib.className == 'p1' && ceNxtElSib.innerHTML == 'Новини'){
-          currEl.style.display = 'none';
+      var wrapperSticky = jQuery("BODY > MAIN[class*='wrap'] ARTICLE[class*='post'] > DIV[class*='block_post'] > DIV[class*='post__text'] > DIV[class*='wrapper-sticky']");
+      if(wrapperSticky.length == 1){
+        var postSocialSide = wrapperSticky.children("DIV[class*='post__social__side']");
+        if(postSocialSide.length == 1){
+          var originalPostSocialSideClass = postSocialSide.attr('class');
+          var originalPostSocialSideStyle = postSocialSide.attr('style');
+          jQuery(window).on('scroll',function(){
+            if(wrapperSticky.attr('class').indexOf('sticky-active') != -1){
+              wrapperSticky.attr('class','wrapper-sticky');
+            }
+
+            if(postSocialSide.attr('class').indexOf('sticky') != -1){
+              postSocialSide.attr('class',originalPostSocialSideClass);
+            }
+
+            if(postSocialSide.attr('style').indexOf('position: fixed;') != -1){
+              postSocialSide.attr('style',originalPostSocialSideStyle);
+            }
+
+            if(postSocialSide.attr('style').indexOf('inset: auto;') == -1){
+              postSocialSide.attr('style',originalPostSocialSideStyle);
+            }
+          });
         }
       }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('admixer') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.id.indexOf('phoenix') != -1){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'DIV' && currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-
-      if(currEl.tagName == 'BR'){
-        currEl.style.display = 'none';
-      }
-    }
+    });
   }
 
-  this.tt2FirstElChildren = function(){
-    var tt2Collection = document.getElementsByClassName('tt2');
-    var tt2FirstEl = tt2Collection[1];
-    tt2FirstEl.style.marginTop = '12px';
-    var tt2FirstElChildren = tt2FirstEl.children;
-    var tt2FElChLength = tt2FirstElChildren.length;
-    for(var i=0; i<tt2FElChLength; i++){
-      var currEl = tt2FirstElChildren[i];
-
-      if(currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-    }
-  }
-
-  this.tt3FirstElChildren = function(){
-    var tt3Collection = document.getElementsByClassName('tt3');
-    var tt3FirstEl = tt3Collection[1];
-    tt3FirstEl.style.marginTop = '12px';
-    var tt3FirstElChildren = tt3FirstEl.children;
-    var tt3FElChLength = tt3FirstElChildren.length;
-    for(var i=0; i<tt3FElChLength; i++){
-      var currEl = tt3FirstElChildren[i];
-
-      if(currEl.className == 'space12'){
-        currEl.style.display = 'none';
-      }
-    }
-  }
-
-  this.tt4ZeroEl = function(){
-    var tt4Collection = document.getElementsByClassName('tt4');
-    var tt4ZeroEl = tt4Collection[0];
-    tt4ZeroEl.style.display = 'none';
-  }
 }
 
-TabloIDNews.bodyBackgroundStyle();
-TabloIDNews.main2Form();
-TabloIDNews.ttZeroElChildren();
-TabloIDNews.tt2ZeroElParentChildren();
-TabloIDNews.tt2ZeroElChildren();
-TabloIDNews.tt3ZeroElChildren();
-TabloIDNews.tt2FirstElChildren();
-TabloIDNews.tt3FirstElChildren();
-TabloIDNews.tt4ZeroEl();
+TabloIDNews.body();
+TabloIDNews.topPostComments();
+TabloIDNews.blockPost();
+TabloIDNews.postText();
+TabloIDNews.layoutArticleSidebar();
+TabloIDNews.lastEndlessBanner();
+TabloIDNews.onScrollElements();
