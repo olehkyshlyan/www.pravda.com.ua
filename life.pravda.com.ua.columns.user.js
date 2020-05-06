@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Life | UPravda | Columns
+// @name         Life | Ukrainska pravda | Columns
 // @namespace    https://life.pravda.com.ua/columns/
 // @noframes
 // @version      0.1
@@ -11,7 +11,7 @@
 // @grant        none
 // ==/UserScript==
 
-var LifePravdaColumns = new function(){
+var LifeUPColumns = new function(){
 
   this.body = function(){
     var bodyInclosure = function(){
@@ -23,26 +23,21 @@ var LifePravdaColumns = new function(){
         body.style.backgroundPosition = '0% 0%';
         body.style.paddingTop = '10px';
 
-        var bodyChildren = body.children;
-        var bdChLen = bodyChildren.length;
-
-        for(var i=0; i<bdChLen; i++){
-          var bodyChild = bodyChildren[i];
-
-          if(bodyChild.tagName == 'A' && bodyChild.id.indexOf('ar') != -1){
-            bodyChild.style.display = 'none';
+        for(property of body.children){
+          if(property.tagName == 'A' && bodyChild.id.indexOf('ar') != -1){
+            property.style.display = 'none';
           }
 
-          if(bodyChild.id == 'fb-root'){
-            bodyChild.style.display = 'none';
+          if(property.id == 'fb-root'){
+            property.style.display = 'none';
           }
 
-          if(bodyChild.tagName == 'IFRAME'){
-            bodyChild.style.display = 'none';
+          if(property.tagName == 'IFRAME'){
+            property.style.display = 'none';
           }
 
-          if(bodyChild.tagName == 'IMG'){
-            bodyChild.style.display = 'none';
+          if(property.tagName == 'IMG'){
+            property.style.display = 'none';
           }
         }
       }
@@ -52,76 +47,63 @@ var LifePravdaColumns = new function(){
 
   this.mainInterviewPage = function(){
     var mainIntPageInclosure = function(){
-      var mainInterviewPagCollection = document.getElementsByClassName('main interview-page');
-      var mainInterviewPageZeroEl = mainInterviewPagCollection[0];
-      if(mainInterviewPageZeroEl != undefined){
-        var mainIntPgZeroElChildren = mainInterviewPageZeroEl.children;
-        var mnIntPgZeroElChLen = mainIntPgZeroElChildren.length;
-
-        for(var i=0; i<mnIntPgZeroElChLen; i++){
-          var currEl = mainIntPgZeroElChildren[i];
-
-          if(currEl.className == 'pagewrap'){
-            for(subproperty of currEl.children){
-              if(subproperty.className == 'banner'){
-                subproperty.style.display = 'none';
+      jQuery(function(){
+        var mainInterviewPage = jQuery("BODY > DIV[class*='main'][class*='interview-page']");
+        if(mainInterviewPage.length == 1){
+          mainInterviewPage.children().each(function(index,element){
+            if(element.className == 'pagewrap'){
+              for(property of element.children){
+                if(property.className == 'banner'){
+                  property.style.display = 'none';
+                }
               }
             }
-          }
 
-          if(currEl.id == 'fb-root'){
-            currEl.style.display = 'none';
-          }
+            if(element.className.indexOf('banner') != -1){
+              element.style.display = 'none';
+            }
 
-          if(currEl.id.indexOf('admixer') != -1){
-            currEl.style.display = 'none';
-          }
+            if(element.id == 'fb-root'){
+              element.style.display = 'none';
+            }
 
-          if(currEl.id.indexOf('mwayss') != -1){
-            currEl.style.display = 'none';
-          }
+            if(element.id.indexOf('admixer') != -1){
+              element.style.display = 'none';
+            }
 
-          if(currEl.id.indexOf('adriver') != -1){
-            currEl.style.display = 'none';
-          }
+            if(element.id.indexOf('mwayss') != -1){
+              element.style.display = 'none';
+            }
+
+            if(element.id.indexOf('adriver') != -1){
+              element.style.display = 'none';
+            }
+          });
         }
-      }
+      });
     }
     setTimeout(mainIntPageInclosure,3000);
-  }
-
-  this.mwayss = function(){
-    jQuery(window).on('scroll',function(){
-      var body = document.body;
-      if(body != undefined){
-        var interviewPage = NodesCircuit.circuit(body,{childNode:{how:'indexOf',attr:'className',what:'interview-page'}});
-        if(interviewPage != null){
-          for(property of interviewPage.children){
-            if(property.id.indexOf('mwayss') != -1){
-              property.parentElement.removeChild(property);
-            }
-          }
-        }
-      }
-    });
   }
 
   this.articleColumn = function(){
     var articleColumnInclosure = function(){
       jQuery(function(){
-        var articleColumn = jQuery("BODY > DIV[class*='main'] > DIV[class*='article-page'] DIV.article-column");
+        var articleColumn = jQuery("BODY > DIV[class*='main'][class*='interview-page'] > DIV[class*='pagewrap'] DIV[class*='article-column']");
         if(articleColumn.length == 1){
           articleColumn.children().each(function(index,element){
-            if(element.className.indexOf('statistic-top-block') != -1){
-              jQuery(element).children().each(function(lev2index,lev2element){
-                if(lev2element.className == 'net-block'){
-                  lev2element.style.display = 'none';
-                }
+            if(element.className.indexOf('article-wrap') != -1){
+              var statisticTopBlock = jQuery(element).find("DIV[class*='statistic-top-block']");
+              if(statisticTopBlock.length == 1){
+                statisticTopBlock.children().each(function(lev2index,lev2element){
+                  if(lev2element.className.indexOf('net-block') != -1){
+                    lev2element.style.display = 'none';
+                  }
 
-                if(lev2element.className.indexOf('comment') != -1){
-                  lev2element.style.display = 'none';
-                }
-              });
+                  if(lev2element.className.indexOf('comment') != -1){
+                    lev2element.style.display = 'none';
+                  }
+                });
+              }
             }
 
             if(element.className == 'net-wrap'){
@@ -156,31 +138,69 @@ var LifePravdaColumns = new function(){
     setTimeout(articleColumnInclosure,3000);
   }
 
-  this.sidebar = function(){
-    var sidebarInclosure = function(){
-      var sidebarCollection = document.getElementsByClassName('sidebar');
-      if(sidebarCollection.length > 0){
-        var sidebarZeroEl = sidebarCollection[0];
-        if(sidebarZeroEl != undefined){
-          var mobileBlockWrap = sidebarZeroEl.children[0];
-          if(mobileBlockWrap != undefined){
-            var mobBlockWrapChildren = mobileBlockWrap.children;
-            var mobBkWrapChLen = mobBlockWrapChildren.length;
+  this.article = function(){
+    var articleInclosure = function(){
+      jQuery(function(){
+        var article = jQuery("BODY > DIV[class*='main'][class*='interview-page'] > DIV[class*='pagewrap'] DIV[class*='article-wrap'] > ARTICLE[class*='article']");
+        if(article.length == 1){
+          article.children().each(function(index,element){
+            if(element.tagName == 'P' && element.innerHTML == ''){
+              element.style.display = 'none';
+            }
 
-            for(var i=0; i<mobBkWrapChLen; i++){
-              var mBlWrChild = mobBlockWrapChildren[i];
-
-              if(mBlWrChild.className == 'article_300_banner'){
-                mBlWrChild.style.display = 'none';
-              }
-
-              if(mBlWrChild.id == 'sticky-wrapper'){
-                mBlWrChild.style.display = 'none';
+            if(element.tagName == 'P'){
+              for(property of element.children){
+                if(property.innerHTML == ''){
+                  element.style.display = 'none';
+                }
               }
             }
+
+            if(element.tagName == 'STRONG'){
+              jQuery(element).has("INS[class*='adsbygoogle']").hide();
+            }
+
+            if(element.id.indexOf('ScriptRoot') != -1){
+              element.style.display = 'none';
+            }
+
+            if(element.className.indexOf('adsbygoogle') != -1){
+              element.style.display = 'none';
+            }
+
+            if(element.tagName == 'P'){
+              jQuery("p:contains('Ми хочемо тримати з вами')").hide();
+              jQuery("p:contains('А якщо хочете бути в курсі')").hide();
+            }
+          });
+        }
+      });
+    }
+    setTimeout(articleInclosure,3000);
+  }
+
+  this.sidebar = function(){
+    var sidebarInclosure = function(){
+      jQuery(function(){
+        var sidebar = jQuery("BODY > DIV[class*='main'][class*='interview-page'] > DIV[class*='pagewrap'] > DIV[class*='main-page-wrap'] > DIV[class*='sidebar']");
+        if(sidebar.length == 1){
+          var mobileBlockWrap = sidebar.children("DIV[class*='mobile-block-wrap']");
+          if(mobileBlockWrap.length == 1){
+            mobileBlockWrap.children().each(function(index,element){
+              if(element.className.indexOf('banner') != -1){
+                element.style.display = 'none';
+              }
+
+              if(element.id.indexOf('bn') == 0){
+                var advIframe = jQuery(element).children("IFRAME");
+                if(advIframe.length > 0){
+                  element.style.display = 'none';
+                }
+              }
+            });
           }
         }
-      }
+      });
     }
     setTimeout(sidebarInclosure,2000);
   }
@@ -199,9 +219,9 @@ var LifePravdaColumns = new function(){
   }
 }
 
-LifePravdaColumns.body();
-LifePravdaColumns.mainInterviewPage();
-LifePravdaColumns.mwayss();
-LifePravdaColumns.articleColumn();
-LifePravdaColumns.sidebar();
-LifePravdaSociety.pagePoint();
+LifeUPColumns.body();
+LifeUPColumns.mainInterviewPage();
+LifeUPColumns.articleColumn();
+LifeUPColumns.article();
+LifeUPColumns.sidebar();
+LifeUPColumns.pagePoint();
