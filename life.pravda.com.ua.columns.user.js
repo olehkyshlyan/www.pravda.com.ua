@@ -156,6 +156,16 @@ var LifeUPColumns = new function(){
               }
             }
 
+            if(element.tagName == 'DIV'){
+              var stlAttr = element.hasAttribute('style');
+              if(stlAttr == true){
+                if(element.getAttribute('style').indexOf('solid') != -1){
+                  element.style.marginTop = '20px';
+                  element.style.marginBottom = '20px';
+                }
+              }
+            }
+
             if(element.tagName == 'STRONG'){
               jQuery(element).has("INS[class*='adsbygoogle']").hide();
             }
@@ -186,15 +196,21 @@ var LifeUPColumns = new function(){
         if(sidebar.length == 1){
           var mobileBlockWrap = sidebar.children("DIV[class*='mobile-block-wrap']");
           if(mobileBlockWrap.length == 1){
-            mobileBlockWrap.children().each(function(index,element){
-              if(element.className.indexOf('banner') != -1){
-                element.style.display = 'none';
+            mobileBlockWrap.contents().each(function(index,element){
+              if(element.nodeType == Node.TEXT_NODE){
+                element.remove();
               }
 
-              if(element.id.indexOf('bn') == 0){
-                var advIframe = jQuery(element).children("IFRAME");
-                if(advIframe.length > 0){
-                  element.style.display = 'none';
+              if(element.nodeType == Node.ELEMENT_NODE){
+                if(element.className.indexOf('banner') != -1){
+                  element.style.cssText += '; display: none !important;';
+                }
+
+                if(element.id.indexOf('bn') == 0){
+                  var advIframe = jQuery(element).children("IFRAME");
+                  if(advIframe.length > 0){
+                    element.style.cssText += '; display: none !important;';
+                  }
                 }
               }
             });
